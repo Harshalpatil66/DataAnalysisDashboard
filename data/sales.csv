@@ -1,0 +1,55 @@
+Product,Category,Price,Quantity
+Laptop,Electronics,50000,2
+Phone,Electronics,20000,5
+Tablet,Electronics,25000,3
+Smart TV,Electronics,45000,2
+Headphones,Electronics,2500,12
+Bluetooth Speaker,Electronics,3000,8
+Camera,Electronics,35000,2
+Monitor,Electronics,12000,4
+Keyboard,Electronics,1500,10
+Mouse,Electronics,800,15
+
+Shirt,Fashion,1000,10
+Jeans,Fashion,2000,8
+Shoes,Fashion,3000,4
+Jacket,Fashion,3500,3
+T-Shirt,Fashion,800,15
+Kurta,Fashion,1200,7
+Saree,Fashion,2500,5
+Sneakers,Fashion,4000,6
+Cap,Fashion,500,12
+Watch Belt,Fashion,700,10
+
+Watch,Accessories,2000,7
+Sunglasses,Accessories,1500,9
+Wallet,Accessories,1200,8
+Handbag,Accessories,3000,4
+Perfume,Accessories,2500,5
+Belt,Accessories,800,10
+Jewelry Box,Accessories,1800,3
+Travel Bag,Accessories,3500,4
+Backpack,Accessories,2200,6
+Keychain,Accessories,200,20
+
+Sofa,Furniture,13000,3
+Dining Table,Furniture,18000,2
+Chair,Furniture,2500,10
+Bed,Furniture,22000,2
+Wardrobe,Furniture,25000,1
+Study Table,Furniture,6000,4
+Bookshelf,Furniture,4500,5
+TV Unit,Furniture,8000,3
+Coffee Table,Furniture,3500,4
+Office Chair,Furniture,7000,3
+
+Rice,Groceries,60,50
+Wheat Flour,Groceries,45,40
+Sugar,Groceries,50,35
+Cooking Oil,Groceries,180,20
+Tea Powder,Groceries,250,15
+Coffee,Groceries,300,12
+Milk,Groceries,30,60
+Biscuits,Groceries,20,80
+Noodles,Groceries,25,70
+Soap,Groceries,40,45
