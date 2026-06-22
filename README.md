@@ -2,24 +2,27 @@
 
 ## Overview
 
-The Data Analysis Dashboard is an interactive web application developed using Python, Streamlit, Pandas, NumPy, and Matplotlib. The application enables users to upload CSV datasets, analyze sales performance, visualize key business metrics, and generate actionable insights through an intuitive dashboard interface.
+Data Analysis Dashboard is an interactive web application built using Python and Streamlit that allows users to upload CSV datasets and perform automated data analysis. The dashboard provides dataset insights, statistical summaries, missing value analysis, visualizations, and downloadable reports through an easy-to-use interface.
 
-This project demonstrates practical skills in data analysis, data visualization, dashboard development, and version control using industry-standard Python tools.
+This project demonstrates practical skills in Python programming, data analysis, data visualization, and dashboard development.
 
 ---
 
-## Key Features
+## Features
 
-* CSV file upload and processing
-* Interactive category-based filtering
-* Product search functionality
-* Real-time KPI (Key Performance Indicator) cards
-* Revenue and sales analysis
-* Top-performing product identification
-* Category-wise sales visualization
-* Revenue trend analysis
-* Downloadable filtered reports
-* Responsive and user-friendly dashboard interface
+* Upload and analyze CSV datasets
+* Dataset preview and exploration
+* Dataset information (rows, columns, column names)
+* Missing value analysis
+* Statistical summary generation
+* Interactive KPI cards
+* Dynamic column selection
+* Bar chart visualization
+* Line chart visualization
+* Histogram distribution analysis
+* Pie chart visualization
+* Download processed dataset
+* Fast data loading using Python decorators
 
 ---
 
@@ -57,16 +60,16 @@ DataAnalysisDashboard
 ├── app.py
 ├── analysis.py
 ├── data/
-│   └── sales.csv
+│
 ├── requirements.txt
 └── README.md
 ```
 
 ---
 
-## Installation and Setup
+## Installation
 
-### Clone the Repository
+### Clone Repository
 
 ```bash
 git clone https://github.com/Harshalpatil66/DataAnalysisDashboard.git
@@ -79,15 +82,13 @@ cd DataAnalysisDashboard
 pip install -r requirements.txt
 ```
 
-### Run the Application
+### Run Application
 
 ```bash
 python -m streamlit run app.py
 ```
 
-### Access the Dashboard
-
-Open your browser and visit:
+### Open Dashboard
 
 ```text
 http://localhost:8501
@@ -97,55 +98,50 @@ http://localhost:8501
 
 ## Dashboard Functionalities
 
-### Data Exploration
+### Dataset Analysis
 
-Users can upload custom CSV files and explore sales data interactively.
+* Preview uploaded datasets
+* Explore dataset structure
+* Identify missing values
+* Generate statistical summaries
 
-### Data Filtering
+### Data Visualization
 
-Filter records by category and search products instantly.
+* Bar Charts
+* Line Charts
+* Histograms
+* Pie Charts
 
-### Business Insights
+### Data Insights
 
-The dashboard automatically calculates:
-
-* Total Revenue
-* Average Product Price
-* Product Count
-* Top-Selling Product
-
-### Visual Analytics
-
-The application provides:
-
-* Category-wise Sales Charts
-* Revenue Distribution Analysis
-* Revenue Trend Visualization
+* Mean
+* Maximum Value
+* Minimum Value
+* Distribution Analysis
 
 ---
 
 ## Skills Demonstrated
 
-This project showcases proficiency in:
-
-* Data Analysis and Manipulation
+* Python Programming
+* Data Analysis
 * Data Visualization
 * Dashboard Development
 * CSV Data Processing
-* Python Programming
 * Streamlit Framework
-* Git and GitHub Workflow
-* Business Data Reporting
+* Object-Oriented Programming Concepts
+* Python Decorators
+* Git & GitHub Version Control
 
 ---
 
-## Future Enhancements
+## Future Improvements
 
-* Machine Learning-Based Sales Prediction
-* Advanced Interactive Charts
-* PDF Report Generation
+* Machine Learning Predictions
+* Advanced Data Analytics
+* Export Reports as PDF
 * Database Integration
-* User Authentication System
+* User Authentication
 * Cloud Deployment
 
 ---
