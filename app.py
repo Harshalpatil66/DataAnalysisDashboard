@@ -7,7 +7,7 @@ import time
 # Page Configuration
 # ----------------------------------
 st.set_page_config(
-    page_title="Sales Dashboard",
+    page_title="Universal Data Analysis Dashboard",
     page_icon="📊",
     layout="wide"
 )
@@ -32,15 +32,17 @@ def timer(func):
     return wrapper
 
 # ----------------------------------
-# Load Data Function
+# Load Data
 # ----------------------------------
 @timer
 def load_data(file):
     return pd.read_csv(file)
 
 # ----------------------------------
-# File Upload
+# Sidebar Upload
 # ----------------------------------
+st.sidebar.title("Upload Dataset")
+
 uploaded_file = st.sidebar.file_uploader(
     "Upload CSV File",
     type=["csv"]
@@ -49,178 +51,198 @@ uploaded_file = st.sidebar.file_uploader(
 if uploaded_file is not None:
     df = load_data(uploaded_file)
 else:
-    df = load_data("data/sales.csv")
+    st.title("📊 Universal Data Analysis Dashboard")
+    st.info("Please upload a CSV file from the sidebar.")
+    st.stop()
 
-# Remove extra spaces from column names
+# ----------------------------------
+# Data Cleaning
+# ----------------------------------
 df.columns = df.columns.str.strip()
-
-# ----------------------------------
-# Data Preparation
-# ----------------------------------
-df["Total"] = df["Price"] * df["Quantity"]
-
-# ----------------------------------
-# Sidebar Filters
-# ----------------------------------
-st.sidebar.header("Filter Data")
-
-category = st.sidebar.selectbox(
-    "Select Category",
-    ["All"] + list(df["Category"].unique())
-)
-
-search = st.sidebar.text_input(
-    "Search Product"
-)
-
-# ----------------------------------
-# Category Filter
-# ----------------------------------
-if category == "All":
-    filtered_df = df.copy()
-else:
-    filtered_df = df[df["Category"] == category].copy()
-
-# ----------------------------------
-# Search Filter
-# ----------------------------------
-if search:
-    filtered_df = filtered_df[
-        filtered_df["Product"].str.contains(
-            search,
-            case=False,
-            na=False
-        )
-    ]
 
 # ----------------------------------
 # Dashboard Title
 # ----------------------------------
-st.title("📊 Sales Dashboard")
+st.title("📊 Universal Data Analysis Dashboard")
 
 # ----------------------------------
-# Dataset Summary
+# Dataset Preview
 # ----------------------------------
-st.subheader("Dataset Summary")
+st.subheader("Dataset Preview")
 
-if not filtered_df.empty:
-    st.dataframe(filtered_df.describe())
-else:
-    st.warning("No data available.")
+st.dataframe(df.head())
 
 # ----------------------------------
-# KPI Cards
+# Dataset Information
 # ----------------------------------
-col1, col2, col3 = st.columns(3)
+st.subheader("Dataset Information")
+
+col1, col2 = st.columns(2)
 
 with col1:
-    st.metric(
-        "Total Revenue",
-        f"₹{filtered_df['Total'].sum():,.0f}"
-    )
+    st.metric("Rows", df.shape[0])
 
 with col2:
-    st.metric(
-        "Products",
-        len(filtered_df)
+    st.metric("Columns", df.shape[1])
+
+st.write("### Column Names")
+st.write(list(df.columns))
+
+# ----------------------------------
+# Missing Values
+# ----------------------------------
+st.subheader("Missing Values Analysis")
+
+missing_values = pd.DataFrame({
+    "Column": df.columns,
+    "Missing Values": df.isnull().sum().values
+})
+
+st.dataframe(missing_values)
+
+# ----------------------------------
+# Statistical Summary
+# ----------------------------------
+st.subheader("Statistical Summary")
+
+numeric_df = df.select_dtypes(include="number")
+
+if not numeric_df.empty:
+    st.dataframe(numeric_df.describe())
+else:
+    st.warning("No numeric columns available for statistical analysis.")
+
+# ----------------------------------
+# Numeric Column Selection
+# ----------------------------------
+numeric_columns = df.select_dtypes(
+    include=["number"]
+).columns
+
+if len(numeric_columns) > 0:
+
+    selected_column = st.selectbox(
+        "Select Numeric Column for Analysis",
+        numeric_columns
     )
 
-with col3:
-    st.metric(
-        "Average Price",
-        f"₹{filtered_df['Price'].mean():,.2f}"
-        if not filtered_df.empty
-        else "₹0"
+    # ----------------------------------
+    # KPI Cards
+    # ----------------------------------
+    st.subheader("Quick Statistics")
+
+    col1, col2, col3 = st.columns(3)
+
+    with col1:
+        st.metric(
+            "Mean",
+            round(df[selected_column].mean(), 2)
+        )
+
+    with col2:
+        st.metric(
+            "Maximum",
+            round(df[selected_column].max(), 2)
+        )
+
+    with col3:
+        st.metric(
+            "Minimum",
+            round(df[selected_column].min(), 2)
+        )
+
+    # ----------------------------------
+    # Bar Chart
+    # ----------------------------------
+    st.subheader("Bar Chart")
+
+    st.bar_chart(df[selected_column])
+
+    # ----------------------------------
+    # Line Chart
+    # ----------------------------------
+    st.subheader("Line Chart")
+
+    st.line_chart(df[selected_column])
+
+    # ----------------------------------
+    # Histogram
+    # ----------------------------------
+    st.subheader("Distribution Histogram")
+
+    fig, ax = plt.subplots(figsize=(8, 4))
+
+    ax.hist(
+        df[selected_column].dropna(),
+        bins=10
     )
 
-# ----------------------------------
-# Top Product
-# ----------------------------------
-if not filtered_df.empty:
-
-    top_product = filtered_df.loc[
-        filtered_df["Total"].idxmax()
-    ]
-
-    st.success(
-        f"🏆 Top Product: {top_product['Product']} (Revenue ₹{top_product['Total']:,})"
+    ax.set_title(
+        f"Distribution of {selected_column}"
     )
-
-# ----------------------------------
-# Data Table
-# ----------------------------------
-st.subheader("Sales Data")
-
-st.dataframe(filtered_df)
-
-# ----------------------------------
-# Download Button
-# ----------------------------------
-csv = filtered_df.to_csv(index=False)
-
-st.download_button(
-    label="📥 Download Report",
-    data=csv,
-    file_name="sales_report.csv",
-    mime="text/csv"
-)
-
-# ----------------------------------
-# Bar Chart
-# ----------------------------------
-if not filtered_df.empty:
-
-    st.subheader("Category Wise Quantity")
-
-    category_sales = filtered_df.groupby(
-    "Category"
-    )["Quantity"].sum()
-
-    fig, ax = plt.subplots(figsize=(8, 5))
-
-    ax.bar(
-        category_sales.index,
-        category_sales.values
-    )
-
-    ax.set_title("Category Wise Sales")
-    ax.set_xlabel("Category")
-    ax.set_ylabel("Quantity Sold")
 
     st.pyplot(fig)
 
-st.write(category_sales)
+else:
+    st.warning(
+        "No numeric columns found in the uploaded dataset."
+    )
 
 # ----------------------------------
 # Pie Chart
 # ----------------------------------
-st.subheader("Category Distribution")
+st.subheader("Pie Chart")
 
-category_sales = (
-    filtered_df.groupby("Category")["Quantity"]
-    .sum()
-)
+categorical_columns = df.select_dtypes(
+    include=["object"]
+).columns
 
-fig2, ax2 = plt.subplots(figsize=(7, 7))
+if len(categorical_columns) > 0:
 
-ax2.pie(
-    category_sales.values,
-    labels=category_sales.index,
-    autopct="%1.1f%%",
-    startangle=90
-)
-
-ax2.axis("equal")
-
-st.pyplot(fig2)
-
-# ----------------------------------
-# Revenue Trend
-# ----------------------------------
-if not filtered_df.empty:
-
-    st.subheader("Revenue Trend")
-
-    st.line_chart(
-        filtered_df["Total"]
+    selected_category = st.selectbox(
+        "Select Categorical Column",
+        categorical_columns
     )
+
+    pie_data = (
+        df[selected_category]
+        .value_counts()
+        .head(10)
+    )
+
+    fig2, ax2 = plt.subplots(figsize=(7, 7))
+
+    ax2.pie(
+        pie_data.values,
+        labels=pie_data.index,
+        autopct="%1.1f%%",
+        startangle=90
+    )
+
+    ax2.axis("equal")
+
+    st.pyplot(fig2)
+
+else:
+    st.info(
+        "No categorical columns available for pie chart."
+    )
+
+# ----------------------------------
+# Full Dataset
+# ----------------------------------
+st.subheader("Complete Dataset")
+
+st.dataframe(df)
+
+# ----------------------------------
+# Download Dataset
+# ----------------------------------
+csv = df.to_csv(index=False)
+
+st.download_button(
+    label="📥 Download Dataset",
+    data=csv,
+    file_name="processed_data.csv",
+    mime="text/csv"
+)
